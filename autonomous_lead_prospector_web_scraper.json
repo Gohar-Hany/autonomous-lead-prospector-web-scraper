@@ -1,0 +1,1176 @@
+{
+  "updatedAt": "2026-05-28T17:57:00.540Z",
+  "createdAt": "2026-01-05T19:54:09.872Z",
+  "id": "etRLduJOwyvKykt7",
+  "name": "Lead Generation",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=name: {{ $('Map Lead Fields').item.json.name }}",
+        "messages": {
+          "messageValues": [
+            {
+              "message": "=You are a name extractor. Your task is to normalize a provided name so it can be safely included in an email.\n\n##OUTPUT FORMAT (Strict JSON)\n{\n  \"name\": \"Karim Nabil\"\n}\n\n##INSTRUCTIONS\n\n**Empty input\nIf the provided name is missing, null, or only whitespace → return:\n{ \"name\": \"\" }\nCapitalization\n\n**Always capitalize the first letter of each word in the name.\nExamples:\nkarim → Karim\nkarim nabil → Karim Nabil\naHMeD saLaH → Ahmed Salah\n\n**Company / Department / Generic addresses\nIf the name is one of the following (case-insensitive), return empty:\ninfo, information, marketing, sales, support, admin, team, hr, careers, recruitment, recruiting, jobs,\nhello, contact, enquiries, billing, finance, accounting, customer service, service, help, noreply, no-reply,\nwebmaster, it, ict, office, reception, secretary, gm, ceo, cto, coo, cfo, founder, owner, manager,\ndepartment, dept, operations, ops, social, media, pr, csr\nExample:\nInput: support →\n{ \"name\": \"\" }\n\n##Symbols, emails, or invalid strings\nIf the input contains @, numbers only, or looks like an email/placeholder → return empty.\nExample: support@company.com → { \"name\": \"\" }\n\n##Valid personal names only\nOutput should contain only the cleaned, capitalized personal name."
+            }
+          ]
+        },
+        "batching": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.7,
+      "position": [
+        3520,
+        -64
+      ],
+      "id": "11ff6f44-4465-44ef-8dda-1cc66d64c011",
+      "name": "✍️ Normalize Contact Name",
+      "alwaysOutputData": false
+    },
+    {
+      "parameters": {
+        "content": "## 🔍 LEAD FILTERING\n\nFilters out leads missing email or website.\n\nOnly valid leads proceed to processing.",
+        "height": 336,
+        "width": 640,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        2336,
+        -224
+      ],
+      "id": "970e75aa-266c-4440-90e2-38ed6dd0d801",
+      "name": "🔍 Lead Filtering Note"
+    },
+    {
+      "parameters": {
+        "content": "## 🤖 AI LEAD RESEARCH\n\nUses AI agent with web search to research each company.\n\n- Checks ads, tools, marketing team\n- Identifies main opportunity\n- Generates detailed report",
+        "height": 672,
+        "width": 464,
+        "color": "#151F04"
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        2992,
+        -256
+      ],
+      "id": "da771414-a229-4bac-a595-de18d44b5505",
+      "name": "🤖 AI Research Note"
+    },
+    {
+      "parameters": {
+        "content": "## ✍️ NAME PROCESSING\n\nNormalizes and validates contact names.\n\n- Fixes capitalization\n- Removes generic names (info, support, etc.)\n- Defaults to \"Team\" if invalid",
+        "height": 528,
+        "width": 496,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        3472,
+        -256
+      ],
+      "id": "e4e4b495-a1ea-4e9f-9127-4debd43d0428",
+      "name": "✍️ Name Processing Note"
+    },
+    {
+      "parameters": {
+        "content": "## 📧 EMAIL GENERATION\n\nGenerates personalized cold email icebreakers.\n\nUses research data to craft authentic, personalized openers.",
+        "height": 528,
+        "width": 448,
+        "color": "#3A3636"
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        3984,
+        -256
+      ],
+      "id": "3c17cafd-5e6f-441f-91ef-60f15f785f3a",
+      "name": "📧 Email Generation Note"
+    },
+    {
+      "parameters": {
+        "content": "## 💾 DATA STORAGE\n\nSaves all lead data and draft emails to Google Sheets.\n\n**Output: Lead Generation Sheet**",
+        "height": 384,
+        "width": 384,
+        "color": 2
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        4448,
+        64
+      ],
+      "id": "10733998-5080-4115-bfdb-ec8a4514baeb",
+      "name": "💾 Data Storage Note"
+    },
+    {
+      "parameters": {
+        "content": "## ⚠️ ERROR HANDLING\n\nNodes with `ContinueErrorOutput` enabled will:\n- Log the error\n- Skip the failed lead\n- Continue processing remaining leads\n\n**AI Agent, Email Generator nodes have retry logic.**",
+        "height": 416,
+        "width": 448,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        4448,
+        -368
+      ],
+      "id": "8daa5acd-1869-462d-9c9c-efb4b09e08a0",
+      "name": "⚠️ Error Handling Note"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.errorTrigger",
+      "typeVersion": 1,
+      "position": [
+        4512,
+        -128
+      ],
+      "id": "77d5e91e-8ce1-4bc4-a2a3-5c1c3d187a6d",
+      "name": "⚠️ Error Trigger"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "err-node",
+              "name": "error_node",
+              "value": "={{ $json.execution.error.node.name }}",
+              "type": "string"
+            },
+            {
+              "id": "err-msg",
+              "name": "error_message",
+              "value": "={{ $json.execution.error.message }}",
+              "type": "string"
+            },
+            {
+              "id": "err-time",
+              "name": "error_timestamp",
+              "value": "={{ $now.toISO() }}",
+              "type": "string"
+            },
+            {
+              "id": "wf-name",
+              "name": "workflow_name",
+              "value": "={{ $json.workflow.name }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        4704,
+        -128
+      ],
+      "id": "a195bef8-ecbd-41f3-b550-ce1dddea3cab",
+      "name": "📋 Format Error Details"
+    },
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "triggerOn": "specificFolder",
+        "folderToWatch": {
+          "__rl": true,
+          "value": "1xQTQKD0xqBtJ_ZzbyhagXRAEf4XPRG2g",
+          "mode": "list",
+          "cachedResultName": "Lead Generation",
+          "cachedResultUrl": "https://drive.google.com/drive/folders/1xQTQKD0xqBtJ_ZzbyhagXRAEf4XPRG2g"
+        },
+        "event": "fileCreated",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDriveTrigger",
+      "typeVersion": 1,
+      "position": [
+        1504,
+        -64
+      ],
+      "id": "4f22d040-5094-4204-9de5-5a6f3c13f9e7",
+      "name": "New Lead File Trigger",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "tEGNyCZrBPzzEnxS",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Lead Website: {{ $json.website }}\nLead Company Name: {{ $json['company name'] }}\nDescription : {{ $json.description }}",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "=# Sales Research Agent\n\nYou are a part of our Sales team. Your role is to search online for any available data about a certain lead.\n\n## INSTRUCTIONS\n**Fetch data related to our services that we can sell to these leads.\n**Don't get too much text, only needed data.\n**Always use your web_search tool 5-8 times per lead.\n**FOCUS: Prioritize AI Automation and Tech Development opportunities first.\n\n## SERVICES (Priority Order)\n**AI Automation & Agentic AI (PRIMARY)\n**Tech Development - Mobile Apps, Web Apps (PRIMARY)\n**Marketing\n**Branding\n**Content Generation\n\n## RESEARCH CHECKLIST\nSearch and determine these 5 data points:\n\n1. **Ads Running**: Yes or No\n   - Check Facebook Ad Library, Instagram ads, Google Ads\n\n2. **Manual Work**: Yes or No\n   - Look for: slow response times, no chatbot, hiring for repetitive roles, manual posting\n\n3. **Who Handles Marketing**: Owner / Marketing / Operations / Team\n   - Check: LinkedIn posts, job openings, team page\n\n4. **Main Opportunity**: Our biggest sales opportunity\n   - Examples: \"AI chatbot for customer service\", \"Mobile app for bookings\", \"Website development\"\n\n5. **Notes**: One line insight (max 15 words)\n   - Examples: \"Hiring 3 customer service reps\", \"Expanding to 5 locations\", \"Recently funded $500K\"\n\n## OUTPUT\n\n**CRITICAL**: Generate a COMPLETE detailed text report in the \"report\" field with ALL sections below. DO NOT summarize or shorten.\n\nThe report MUST include:\n\n### Executive Summary\n[2-3 sentences explaining: What the company does, their current digital setup, and the main opportunity we identified]\n\n### Related Information\n- **Website**: [URL and quality assessment]\n- **Social Media**: [Platforms and activity level]\n- **Current Tools**: [Any CRM, chatbot, automation tools found]\n- **Team Structure**: [Size and who handles what]\n\n### Sales Insights\n- **Why This Is Their Biggest Gap**: [Explain the pain point]\n- **Our Specific Solution**: [What exactly we will build for them]\n- **Expected Impact**: [Time saved, cost reduction, efficiency gains]\n- **Budget Readiness**: High/Medium/Low [with reasoning]\n\n---\n\nAlso extract these individual fields:\n**Ads Running**: Yes/No\n**Manual Work**: Yes/No\n**Who Handles Marketing**: Owner/Marketing/Operations/Team\n**Main Opportunity**: [Specific opportunity in one sentence]\n**Notes**: [One line max - hiring, growth, funding signals]\n\n## TOOLS\n**web_search tool: use it to search online"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        3104,
+        -48
+      ],
+      "id": "a0ef57c5-7dde-4d79-a3bf-50ece863bfb6",
+      "name": "Research Lead Company",
+      "retryOnFail": true,
+      "maxTries": 2,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "content": "## 📥 DATA INGESTION\n\nWatches Google Drive for new lead Excel files and extracts data.\n\n**Trigger → Extract ID → Download → Parse**",
+        "height": 336,
+        "width": 880,
+        "color": "#271616"
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1440,
+        -224
+      ],
+      "id": "37579e94-0c95-4544-b79e-0fa080ef1e2a",
+      "name": "📥 Data Ingestion Note"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "1d8abc9b-582b-4fb5-b34e-0f007f087bbd",
+              "name": "id",
+              "value": "={{ $json.id }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1728,
+        -64
+      ],
+      "id": "4ce6806b-fdd9-469e-ad2c-ca3addb7229d",
+      "name": "Extract File ID"
+    },
+    {
+      "parameters": {
+        "operation": "download",
+        "fileId": {
+          "__rl": true,
+          "value": "={{ $json.id }}",
+          "mode": "id"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        1952,
+        -64
+      ],
+      "id": "5e9c1547-592c-420d-9b3e-b2b227b6a69f",
+      "name": "Download Lead File",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "tEGNyCZrBPzzEnxS",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "xlsx",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1,
+      "position": [
+        2176,
+        -64
+      ],
+      "id": "d872ff77-e111-43de-91c7-9d1935a603c0",
+      "name": "Parse Excel Data"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "fc44a289-8c50-4682-8b50-c2e63cfc6514",
+              "leftValue": "={{ $json.company_website }}",
+              "rightValue": "/",
+              "operator": {
+                "type": "string",
+                "operation": "exists",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "f8e675e8-99cc-4c30-92e3-e08a659cff9b",
+              "leftValue": "={{ $json.email }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "exists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.2,
+      "position": [
+        2400,
+        -64
+      ],
+      "id": "b8264850-375f-448a-95e3-eb6206cc4f67",
+      "name": "Filter Valid Leads"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        2624,
+        -64
+      ],
+      "id": "877c76ab-dafd-4290-b7bc-b19e74bed574",
+      "name": "Process Each Lead"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "79b10db1-036a-419e-9eb6-2dd5e773420c",
+              "name": "name",
+              "value": "={{ $json.full_name }}",
+              "type": "string"
+            },
+            {
+              "id": "85ef5e23-1eb4-4d06-b9dd-e879a470c819",
+              "name": "email",
+              "value": "={{ $json.email }}",
+              "type": "string"
+            },
+            {
+              "id": "32959132-2f35-4c6f-b8d4-9e101bbfc07a",
+              "name": "website",
+              "value": "={{ $json.company_website }}",
+              "type": "string"
+            },
+            {
+              "id": "da7f84a0-016a-46fa-8d26-a948aa34d990",
+              "name": "company name",
+              "value": "={{ $json.company_name }}",
+              "type": "string"
+            },
+            {
+              "id": "331b96ad-b8fd-4e6d-aa71-e1f14e9ebed2",
+              "name": "title",
+              "value": "={{ $json.job_title }}",
+              "type": "string"
+            },
+            {
+              "id": "8aeb30d3-d25d-4457-a24a-8449346d4729",
+              "name": "phone",
+              "value": "={{ $json.company_phone }}",
+              "type": "string"
+            },
+            {
+              "id": "27f672e4-696e-4d81-8280-3612fd16d1b2",
+              "name": "description",
+              "value": "={{ $json.company_description }}",
+              "type": "string"
+            },
+            {
+              "id": "4a7d1376-3f52-4f16-a0fc-36292605bb94",
+              "name": "company_linkedin",
+              "value": "={{ $('Process Each Lead').item.json.company_linkedin }}",
+              "type": "string"
+            },
+            {
+              "id": "b0f1f029-239a-45e7-8014-60ac20a0d0a0",
+              "name": "lead_linkedin",
+              "value": "={{ $('Process Each Lead').item.json.linkedin }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        2832,
+        -48
+      ],
+      "id": "a64fe119-3434-480a-b7c5-d0c0c4fce0fa",
+      "name": "Map Lead Fields"
+    },
+    {
+      "parameters": {
+        "model": "openai/gpt-4o-mini",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
+      "typeVersion": 1,
+      "position": [
+        3040,
+        192
+      ],
+      "id": "a5b8e41d-96f9-4f60-bd6d-530f27bde592",
+      "name": "Research AI Model",
+      "credentials": {
+        "openRouterApi": {
+          "id": "4EX4QFWKTRgupXJH",
+          "name": "Hackathon"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://google.serper.dev/search",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "X-API-KEY",
+              "value": "72be06692afb47cfcf0439009ca28074f0325f38"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "q",
+              "value": "={{$fromAI(\"query\")}}"
+            }
+          ]
+        },
+        "options": {
+          "redirect": {
+            "redirect": {}
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [
+        3184,
+        240
+      ],
+      "id": "c6b75a0b-5eef-4435-a75a-815f810476b3",
+      "name": "Web Search Tool"
+    },
+    {
+      "parameters": {
+        "schemaType": "manual",
+        "inputSchema": "{\n  \"type\": \"object\",\n  \"properties\": {\n    \"ads_running\": {\n      \"type\": \"string\",\n      \"enum\": [\"Yes\", \"No\"]\n    },\n    \"manual_work\": {\n      \"type\": \"string\",\n      \"enum\": [\"Yes\", \"No\"]\n    },\n    \"who_handles_marketing\": {\n      \"type\": \"string\",\n      \"enum\": [\"Owner\", \"Marketing\", \"Operations\", \"Team\"]\n    },\n    \"main_opportunity\": {\n      \"type\": \"string\"\n    },\n    \"notes\": {\n      \"type\": \"string\"\n    },\n    \"report\": {\n      \"type\": \"string\"\n    }\n  }\n}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        3344,
+        208
+      ],
+      "id": "dc91c27e-88f3-45a7-9d38-e4f164ba0d22",
+      "name": "Research Output Parser"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "c4705133-f91c-4e4a-a457-cfafc94c1e7e",
+              "name": "name",
+              "value": "={{ $json.name|| \"Team\"}} ",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        3808,
+        -64
+      ],
+      "id": "2946ca16-b23e-48d8-9378-4aee9ccd07a3",
+      "name": "Set Normalized Name"
+    },
+    {
+      "parameters": {
+        "model": "openai/gpt-4o-mini",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
+      "typeVersion": 1,
+      "position": [
+        4096,
+        128
+      ],
+      "id": "cecf93ee-925b-47c3-9625-f4ce6e685c79",
+      "name": "Email Writer Model",
+      "credentials": {
+        "openRouterApi": {
+          "id": "4EX4QFWKTRgupXJH",
+          "name": "Hackathon"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "163-iukLaoPzneOFJlIfe0i56Vo2yT4UTGlLJakKSezs",
+          "mode": "list",
+          "cachedResultName": "Lead Generation",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/163-iukLaoPzneOFJlIfe0i56Vo2yT4UTGlLJakKSezs/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 425219781,
+          "mode": "list",
+          "cachedResultName": "Gohar",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/163-iukLaoPzneOFJlIfe0i56Vo2yT4UTGlLJakKSezs/edit#gid=425219781"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Business Name": "={{ $('Map Lead Fields').item.json['company name'] }}",
+            "Platform": "Apollo",
+            "Website": "=Yes",
+            "Primary Contact Method ": "Email",
+            "Contact Details": "=Name : {{ $('Map Lead Fields').item.json.name }}\nTitle : {{ $('Map Lead Fields').item.json.title }}\nPhone : {{ $('Map Lead Fields').item.json.phone }}\nEmail : {{ $('Map Lead Fields').item.json.email }}\nWebsite : {{ $('Map Lead Fields').item.json.website }}\nCompany Linkedin : {{ $('Map Lead Fields').item.json.company_linkedin }}\nLinkedin : {{ $('Map Lead Fields').item.json.lead_linkedin }}",
+            "Lead Reception": "=Email",
+            "Business Link": "={{ $('Map Lead Fields').item.json.website }}",
+            "Ads Running": "={{ $('Research Lead Company').item.json.output.ads_running }}",
+            "Manual Work": "={{ $('Research Lead Company').item.json.output.manual_work }}",
+            "Who Handles Marketing": "={{ $('Research Lead Company').item.json.output.who_handles_marketing }}",
+            "Main Opportunity": "={{ $('Research Lead Company').item.json.output.main_opportunity }}",
+            "Notes ": "={{ $('Research Lead Company').item.json.output.notes }}",
+            "Draft Email": "=Hey {{ $('Map Lead Fields').item.json.name }},\n{{ $json.output.draft.replace(/\\\\n/g, '\\n').replaceAll('—', \", \") }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Business Name",
+              "displayName": "Business Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Platform",
+              "displayName": "Platform",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Business Link",
+              "displayName": "Business Link",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Website",
+              "displayName": "Website",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Primary Contact Method ",
+              "displayName": "Primary Contact Method ",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Contact Details",
+              "displayName": "Contact Details",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Lead Reception",
+              "displayName": "Lead Reception",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Ads Running",
+              "displayName": "Ads Running",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Manual Work",
+              "displayName": "Manual Work",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Who Handles Marketing",
+              "displayName": "Who Handles Marketing",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Main Opportunity",
+              "displayName": "Main Opportunity",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Notes ",
+              "displayName": "Notes ",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Draft Email",
+              "displayName": "Draft Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        4560,
+        256
+      ],
+      "id": "2246be6d-d2dd-43b0-8843-0ababb6a5f9c",
+      "name": "Save to Google Sheets",
+      "executeOnce": false,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "jy58BxClZutdZdvF",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "schemaType": "manual",
+        "inputSchema": "{\n\t\"type\": \"object\",\n\t\"properties\": {\n\t\t\"draft\": {\n\t\t\t\"type\": \"string\",\n            \"description\": \"cold email created by AI\"\n\t\t}\n\t\t\n\t}\n}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        4256,
+        144
+      ],
+      "id": "86de832a-3248-46bc-b1b6-e9723093c528",
+      "name": "Structured Output Parser"
+    },
+    {
+      "parameters": {
+        "model": "openai/gpt-oss-120b",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+      "typeVersion": 1,
+      "position": [
+        3584,
+        112
+      ],
+      "id": "d5974c5f-16e4-4b4c-bb34-335e78ca59ef",
+      "name": "Name Normalizer Model",
+      "credentials": {
+        "groqApi": {
+          "id": "GZekMYOh24865gcy",
+          "name": "Hackathon"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $('Research Lead Company').item.json.output.report }}",
+        "hasOutputParser": true,
+        "messages": {
+          "messageValues": [
+            {
+              "message": "=## ROLE\nYou are our company sales expert. Your role is to prepare cold emails to send to leads.\n\nWe just scraped a series of web pages for a business called {{ $('Map Lead Fields').item.json['company name'] }}.\n\n## CONTEXT VARIABLES\n- company_name_raw: {{ $('Map Lead Fields').item.json['company name'] }}\n\n## TASK\nTake the provided page summaries and craft concise, personalized openers that feel derived from the company’s own site/news/services (never the individual). Do not invent facts.\n\n## OUTPUT\nReturn strict JSON with two keys \"draft\", \"company_summary\".\n\n## RULES\n- Company-centric only; never reference personal social profiles.\n- Positive framing—do not point out problems or critiques.\n- Offer **only** a brief meeting (10–15 minutes) to discuss more; no proposals or attachments.\n- Use a professional yet friendly tone.\n- Focus on small, non-obvious details from summaries (section names, microcopy, page structures).\n- Keep it short (2 paragraphs 4–6 sentences per draft).\n- Choose any mentions from our services only: Branding, Content Creation, Motion Graphics, Marketing, Campaigns, Photography, Packaging, Websites.\n- Shorten the company name wherever possible (say, \"XYZ\" instead of \"XYZ Agency\"). More examples: \"Love AMS\" instead of \"Love AMS Professional Services\", \"Love Mayo\" instead of \"Love Mayo Inc.\", etc.\n- Do not fabricate numbers, clients, or results.\n **Plain text only**: no `\\n`, `\\\\n`, `<br>`, or markdown formatting.\n- Must be ready to paste directly into an email editor.\n\n## TEMPLATES (use as patterns; adapt language to the specific summary)\n\n{\n  \"draft\": \"I spent some time on {site_ref_1} and really liked the {micro_detail_from_site} touch—it sets a strong tone for your digital presence. It’d be great to compare notes from those pages and hear what’s next on your roadmap.\\\\n\\\\nOpen to a quick 10–15 min call?\",\n\n  \"draft\": \"Your update on {news_or_blog_item} pairs nicely with what’s outlined on {services_or_solutions_page}. There’s a clear narrative building across the site, and I’d love to share a couple of lightweight ideas that build on that momentum.\\\\n\\\\nWould a brief 10–15 min chat be useful?\",\n\n  \"draft\": \"While browsing {collection_or_category}, the {micro_detail_from_gallery} detail stood out—it gives the catalog a distinctive feel. I’d enjoy a short conversation about how that theme could carry across your key pages and channels.\\\\n\\\\nUp for a quick 10–15 min call?\"\n}\n\n## OUR PROFILE\nWe provide: Branding, Content Creation, Motion Graphics, Marketing, Campaigns, Photography, Packaging, Websites.\n"
+            }
+          ]
+        },
+        "batching": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.7,
+      "position": [
+        4112,
+        -64
+      ],
+      "id": "3e923942-dfa4-4e96-9b01-9d33826e3a13",
+      "name": "Generate Cold Email",
+      "alwaysOutputData": true,
+      "onError": "continueErrorOutput"
+    }
+  ],
+  "connections": {
+    "✍️ Normalize Contact Name": {
+      "main": [
+        [
+          {
+            "node": "Set Normalized Name",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "⚠️ Error Trigger": {
+      "main": [
+        [
+          {
+            "node": "📋 Format Error Details",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "New Lead File Trigger": {
+      "main": [
+        [
+          {
+            "node": "Extract File ID",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Research Lead Company": {
+      "main": [
+        [
+          {
+            "node": "✍️ Normalize Contact Name",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Process Each Lead",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract File ID": {
+      "main": [
+        [
+          {
+            "node": "Download Lead File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Download Lead File": {
+      "main": [
+        [
+          {
+            "node": "Parse Excel Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Excel Data": {
+      "main": [
+        [
+          {
+            "node": "Filter Valid Leads",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter Valid Leads": {
+      "main": [
+        [
+          {
+            "node": "Process Each Lead",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Process Each Lead": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Map Lead Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Map Lead Fields": {
+      "main": [
+        [
+          {
+            "node": "Research Lead Company",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Research AI Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Research Lead Company",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Web Search Tool": {
+      "ai_tool": [
+        [
+          {
+            "node": "Research Lead Company",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Research Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "Research Lead Company",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set Normalized Name": {
+      "main": [
+        [
+          {
+            "node": "Generate Cold Email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Email Writer Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Generate Cold Email",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Save to Google Sheets": {
+      "main": [
+        [
+          {
+            "node": "Process Each Lead",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "Generate Cold Email",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Name Normalizer Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "✍️ Normalize Contact Name",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate Cold Email": {
+      "main": [
+        [
+          {
+            "node": "Save to Google Sheets",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {
+    "New Lead File Trigger": [
+      {
+        "json": {
+          "parents": [
+            "1xQTQKD0xqBtJ_ZzbyhagXRAEf4XPRG2g"
+          ],
+          "lastModifyingUser": {
+            "displayName": "Gohar Hany",
+            "kind": "drive#user",
+            "me": true,
+            "permissionId": "05558854598707004190",
+            "emailAddress": "goharhany9@gmail.com",
+            "photoLink": "https://lh3.googleusercontent.com/a/ACg8ocJ8XwG0c0V2eWR5I0ArE5ZsYtgkuNSCWPNq_gmKUbmBtLmTEfY=s64"
+          },
+          "owners": [
+            {
+              "displayName": "Gohar Hany",
+              "kind": "drive#user",
+              "me": true,
+              "permissionId": "05558854598707004190",
+              "emailAddress": "goharhany9@gmail.com",
+              "photoLink": "https://lh3.googleusercontent.com/a/ACg8ocJ8XwG0c0V2eWR5I0ArE5ZsYtgkuNSCWPNq_gmKUbmBtLmTEfY=s64"
+            }
+          ],
+          "permissions": [
+            {
+              "kind": "drive#permission",
+              "id": "05558854598707004190",
+              "type": "user",
+              "emailAddress": "goharhany9@gmail.com",
+              "role": "owner",
+              "displayName": "Gohar Hany",
+              "photoLink": "https://lh3.googleusercontent.com/a/ACg8ocJ8XwG0c0V2eWR5I0ArE5ZsYtgkuNSCWPNq_gmKUbmBtLmTEfY=s64",
+              "deleted": false,
+              "pendingOwner": false
+            }
+          ],
+          "spaces": [
+            "drive"
+          ],
+          "capabilities": {
+            "canAcceptOwnership": false,
+            "canAddChildren": false,
+            "canAddMyDriveParent": false,
+            "canChangeCopyRequiresWriterPermission": true,
+            "canChangeItemDownloadRestriction": true,
+            "canChangeSecurityUpdateEnabled": false,
+            "canChangeViewersCanCopyContent": true,
+            "canComment": true,
+            "canCopy": true,
+            "canDelete": true,
+            "canDisableInheritedPermissions": false,
+            "canDownload": true,
+            "canEdit": true,
+            "canEnableInheritedPermissions": true,
+            "canListChildren": false,
+            "canModifyContent": true,
+            "canModifyContentRestriction": true,
+            "canModifyEditorContentRestriction": true,
+            "canModifyOwnerContentRestriction": true,
+            "canModifyLabels": false,
+            "canMoveChildrenWithinDrive": false,
+            "canMoveItemIntoTeamDrive": true,
+            "canMoveItemOutOfDrive": true,
+            "canMoveItemWithinDrive": true,
+            "canReadLabels": false,
+            "canReadRevisions": true,
+            "canRemoveChildren": false,
+            "canRemoveContentRestriction": false,
+            "canRemoveMyDriveParent": true,
+            "canRename": true,
+            "canShare": true,
+            "canTrash": true,
+            "canUntrash": true
+          },
+          "permissionIds": [
+            "05558854598707004190"
+          ],
+          "linkShareMetadata": {
+            "securityUpdateEligible": false,
+            "securityUpdateEnabled": true
+          },
+          "downloadRestrictions": {
+            "itemDownloadRestriction": {
+              "restrictedForReaders": false,
+              "restrictedForWriters": false
+            },
+            "effectiveDownloadRestrictionWithContext": {
+              "restrictedForReaders": false,
+              "restrictedForWriters": false
+            }
+          },
+          "kind": "drive#file",
+          "id": "1l-IraP3Ln-PdfftSG3gAaazho8Rnp-4K",
+          "name": "Lead_Generation.xlsx",
+          "mimeType": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+          "starred": false,
+          "trashed": false,
+          "explicitlyTrashed": false,
+          "version": "3",
+          "webContentLink": "https://drive.google.com/uc?id=1l-IraP3Ln-PdfftSG3gAaazho8Rnp-4K&export=download",
+          "webViewLink": "https://docs.google.com/spreadsheets/d/1l-IraP3Ln-PdfftSG3gAaazho8Rnp-4K/edit?usp=drivesdk&ouid=117145876270635022907&rtpof=true&sd=true",
+          "iconLink": "https://drive-thirdparty.googleusercontent.com/16/type/application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+          "hasThumbnail": true,
+          "thumbnailLink": "https://lh3.googleusercontent.com/drive-storage/AJQWtBPX0HYYA8e0GOE-s_3NFHdTuQHLF2lFnAlEEBW1LyLVXPVrvpHgP9qwUu70enKRSAh2GO-BM6KxxbUnoJjzcTVVHRCZSIybizJiglNxsWuDZiewPg=s220",
+          "thumbnailVersion": "1",
+          "viewedByMe": true,
+          "viewedByMeTime": "2026-01-22T23:05:20.739Z",
+          "createdTime": "2026-01-22T23:05:20.739Z",
+          "modifiedTime": "2026-01-22T22:56:34.000Z",
+          "modifiedByMeTime": "2026-01-22T22:56:34.000Z",
+          "modifiedByMe": true,
+          "shared": false,
+          "ownedByMe": true,
+          "viewersCanCopyContent": true,
+          "copyRequiresWriterPermission": false,
+          "writersCanShare": true,
+          "originalFilename": "Lead_Generation.xlsx",
+          "fullFileExtension": "xlsx",
+          "fileExtension": "xlsx",
+          "md5Checksum": "f66e385b480d23025e2612778dac7a49",
+          "sha1Checksum": "db69963afbcf4e74c896fc5fc67e2a82e9600df7",
+          "sha256Checksum": "a808010bd6eb85a8b35036c1d78a8a087a85d65d3b4e9187507ac140b93ce067",
+          "size": "117227",
+          "quotaBytesUsed": "117227",
+          "headRevisionId": "0B6xjROy21QZLVUFINDRBaWZYM2Y2NVdCakpaWjhvMkpJWTJvPQ",
+          "isAppAuthorized": false,
+          "inheritedPermissionsDisabled": false
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ]
+  },
+  "versionId": "3f4cd0a7-335f-4e38-8401-a082bec9cbec",
+  "activeVersionId": null,
+  "triggerCount": 0,
+  "shared": [
+    {
+      "updatedAt": "2026-01-05T19:54:09.879Z",
+      "createdAt": "2026-01-05T19:54:09.879Z",
+      "role": "workflow:owner",
+      "workflowId": "etRLduJOwyvKykt7",
+      "projectId": "TsuJDZBgJTN7kOYT"
+    }
+  ],
+  "activeVersion": null,
+  "tags": [
+    {
+      "updatedAt": "2026-01-22T13:56:43.621Z",
+      "createdAt": "2026-01-22T13:56:43.621Z",
+      "id": "KRFN1eWbAKX1rETK",
+      "name": "sales automation"
+    }
+  ]
+}
